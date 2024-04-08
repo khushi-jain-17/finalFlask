@@ -112,11 +112,21 @@ def create_quiz():
     return jsonify({'message': 'Quiz created successfully'}), 201
 
 
-@student_track.route('/quiz/<int:l_id>', methods=['GET'])
-@role_required(1)
+@student_track.route('/lessonquiz/<int:l_id>', methods=['GET'])
+@role_required(2)
 def lesson_analytics(l_id):
     quiz = Quiz.query.get(l_id)
     if quiz:
         return jsonify(quiz.serialize())
     else:
         return jsonify({'error': 'Lesson not found'}), 404
+    
+
+@student_track.route('/quiz', methods=['GET'])
+@role_required(2) 
+def quiz_by_lessons():
+    lid_value = request.json["lid_value"]
+    cid_value = request.json["cid_value"]
+    quizzes = Quiz.query.filter(Quiz.l_id == lid_value, Quiz.cid == cid_value).all()
+    serialized_quizzes = [quiz.serialize() for quiz in quizzes]
+    return jsonify(serialized_quizzes)
