@@ -70,6 +70,7 @@ def dashboard_user():
         output.append(udata)
     return jsonify(output)
 
+
 @auth.route('/create/admin', methods=['POST'])
 def create_admin():
     data = request.get_json()
@@ -81,6 +82,7 @@ def create_admin():
     db.session.add(new_admin)
     db.session.commit()
     return jsonify({'message': 'Admin created successfully'}), 201        
+
 
 @auth.route('/admin/login', methods=['POST'])
 def admin_login():

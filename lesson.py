@@ -38,7 +38,7 @@ def get_lesson():
     return jsonify(output)
 
 
-@mylesson.route('/get_course/<int:lid>',methods=['GET'])
+@mylesson.route('/get_lesson/<int:lid>',methods=['GET'])
 @role_required(1)
 def getbyid(lid):
     lesson = Lesson.query.get_or_404(lid)

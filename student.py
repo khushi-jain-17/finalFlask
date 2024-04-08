@@ -13,7 +13,6 @@ def progress():
     data = request.get_json()
     uid = data.get("uid")
     cid = data.get("cid")
-    # created_at = datetime.now().strftime("%Y-%m-%dT%H:%M")
     lesson_completed = data.get("lesson_completed")
     eid = db.session.query(Enroll.eid).filter(Enroll.uid==uid).first()
     id = eid[0]
