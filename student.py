@@ -62,18 +62,6 @@ def progress_dashboard():
     return jsonify(output), 200
 
 
-@student_track.route("/create/assignment", methods=['POST'])
-@role_required(1)
-def create():
-    qid = request.json["qid"]
-    question = request.json["question"]
-    cid = request.json["cid"]
-    adata = Assignment(qid=qid,question=question,cid=cid)
-    db.session.add(adata)
-    db.session.commit()
-    return jsonify({'message': 'Assignment created successfully'}), 201
-    
- 
 @student_track.route('/eligibility', methods=['GET'])
 @role_required(2)
 def CheckEligibility():
@@ -91,6 +79,18 @@ def CheckEligibility():
         return jsonify({"message": "Keep working! You are not eligible for the assignment yet."}), 200
     
 
+@student_track.route("/create/assignment", methods=['POST'])
+@role_required(1)
+def create():
+    qid = request.json["qid"]
+    question = request.json["question"]
+    cid = request.json["cid"]
+    adata = Assignment(qid=qid,question=question,cid=cid)
+    db.session.add(adata)
+    db.session.commit()
+    return jsonify({'message': 'Assignment created successfully'}), 201
+    
+ 
 @student_track.route('/assignments/<int:cid>', methods=['GET'])
 def get_assignments_by_course(cid):
     assignments = Assignment.query.filter_by(cid=cid).all()
