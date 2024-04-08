@@ -95,6 +95,10 @@ class AssignmentSchema(Schema):
     cid = fields.Integer()
 
 
-
-
-
+class QuizSchema(Schema):
+    quiz_id = fields.Integer(dump_only=True)
+    q_id = fields.Integer(required=True)
+    qcontent = fields.String(required=True)
+    options = fields.String(required=True)
+    cid = fields.Integer()
+    l_id = fields.Integer()

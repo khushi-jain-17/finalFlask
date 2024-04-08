@@ -115,3 +115,23 @@ class Assignment(db.Model):
             'question': self.question,
             'course': self.course.cname  
         }
+    
+
+class Quiz(db.Model):
+    __tablename__ = 'quiz'
+
+    quiz_id = db.Column(db.Integer,primary_key=True, autoincrement=True)
+    q_id = db.Column(db.Integer)
+    qcontent = db.Column(db.Text, nullable=False)
+    options = db.Column(db.Text, nullable=False)
+    cid = db.Column(db.Integer, db.ForeignKey('courses.cid'),nullable=False)
+    l_id = db.Column(db.Integer, nullable=False)
+    mycourse = relationship('Course', back_populates='quizzes')
+
+    def serialize(self):
+        return {
+            'q_id': self.q_id,
+            'qcontent': self.qcontent,
+            'options': self.options,
+            'mycourse': self.mycourse.cname
+        }
