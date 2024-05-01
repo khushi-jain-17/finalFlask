@@ -1,0 +1,564 @@
+{
+    "openapi": "3.0.0",
+    "info": {
+      "description": "Course Management System",
+      "version": "1.0.0",
+      "title": "Flask API",
+      "license": {
+        "name": "MIT",
+        "url": "https://opensource.org/licenses/MIT"
+      }
+    },
+    "tags": [
+      {
+        "cname": "Products API",
+        "description": "Test API"
+      }
+    ],
+    "servers": [
+        {
+        "url": "/"
+        }
+    ],
+    "security":[
+        {
+            "BearerAuth":[]
+        }
+    ],
+        "components": {
+            "securitySchemes": {
+                "BearerAuth": {
+                    "type": "http",
+                    "scheme": "bearer",
+                    "bearerFormat": "JWT"
+                }
+            },
+            "schemas": {
+                
+                "Course": {
+                  "type": "object",
+                  "properties": {
+                        "cid":{
+                        "type":"integer"
+                        },
+                        "cname": {
+                        "type": "string"
+                        },
+                        "description": {
+                        "type": "string"
+                        },
+                        "fee":{
+                          "type": "string"
+                        },
+                        "ctime":{
+                            "type":"string"
+                        },
+                        "rating": {
+                          "type": "number","format":"float"
+                        }
+                    }
+                },
+  
+                "User": {
+                  "type": "object",
+                  "properties": {
+                      "uid":{
+                      "type":"integer"
+                      },
+                      "uname": {
+                      "type": "string"
+                      },
+                      "email":{
+                        "type": "string"
+                      },
+                      "password":{
+                          "type":"string"
+                      }
+                  }
+              },
+
+              "Admin": {
+                  "type": "object",
+                  "properties": {
+                      "admin_id":{
+                      "type":"integer"
+                      },
+                      "password":{
+                          "type":"string"
+                      }
+                  }
+              },
+
+              "Id":{
+                "type" : "integer",
+                "properties" : {
+                    "name" : {
+                        "type" : "integer"
+                    }
+                }
+            },
+
+            "Token":{
+                "type": "string",
+                "properties":{
+                    "header":{
+                      "type":"string"
+                  },
+                  "payload":{
+                    "type":"string"
+                  },
+                  "signature":{
+                    "type":"string"
+                  }
+              }
+            },
+             
+          "update":{
+            "type": "object",
+            "properties" :{
+            "cname": {
+                "type": "string"
+             },
+            "description": {
+               "type": "string"
+            },
+            "fee":{
+               "type": "string"
+            },
+            "ctime":{
+               "type":"string"
+            },
+            "rating": {
+               "type": "float"
+            }
+    }
+  }    
+}
+},
+       "paths": {
+          "/create/course": {
+              "post": {
+              "tags": [
+                  "Add course to API"
+              ],
+              "summary": "Add course",
+              "parameters": [{
+                "name": "token",
+                "in": "query",
+                "description": "insert token",
+                "required": true,
+                "type": "string",
+                "schema" : {
+                    "$ref": "#/components/schemas/Token"
+                }
+              }],
+              "requestBody": {
+              "description": "Post New course To Database",
+              "required": true,
+              "content": {
+                  "application/json": {
+                  "schema": {
+                      "$ref": "#/components/schemas/Course"
+                      }
+                     }
+                }
+              },
+              "responses": {
+                  "200": {
+                      "description": "OK",
+                      "schema": {
+                      "$ref": "#/components/schemas/Course"
+                      }
+                  },
+                  "404": {
+                      "description": "NOT FOUND",
+                      "schema": {
+                      "$ref": "#/components/schemas/Course"
+                      }
+                     }
+                }
+              }
+            },
+              "/courses":{
+              "get" :{
+                "tags": [
+                    "Get All course from API"
+                ],
+                "summary": "Get All courses",
+                "parameters": [{
+                    "name": "Token",
+                    "in": "query",
+                    "description": "insert token",
+                    "required": true,
+                    "type": "string",
+                    "schema" : {
+                        "$ref": "#/components/schemas/Token"
+                    }
+                  }],
+                "responses": {
+                "200": {
+                    "description": "OK",
+                    "schema": {
+                    "$ref": "#/components/schemas/Course"
+                    }
+                },
+                "404": {
+                    "description": "NOT FOUND",
+                    "schema": {
+                    "$ref": "#/components/schemas/Course"
+                    }
+            }
+            }
+            }
+          },
+          "/course/{cid}":{
+
+              "get" :{
+                  "tags": [
+                      "Get courses from API"
+                  ],
+                  "summary": "Get courses",
+                  "parameters": [{
+                    "name": "cid",
+                    "in": "path",
+                    "description": "course id to update",
+                    "required": true,
+                    "type": "integer",
+                    "schema" : {
+                        "$ref": "#/components/schemas/Id"
+                    }
+                  },
+                  {
+                    "name": "token",
+                    "in": "path",
+                    "description": "insert token",
+                    "required": true,
+                    "type": "string",
+                    "schema" : {
+                        "$ref": "#/components/schemas/Token"
+                        }
+                    }
+                ],
+                  "responses": {
+                  "200": {
+                      "description": "OK",
+                      "schema": {
+                      "$ref": "#/components/schemas/Course"
+                      }
+                     },
+                  "404": {
+                      "description": "NOT FOUND",
+                      "schema": {
+                      "$ref": "#/components/schemas/Course"
+                      }
+                    }
+                 }
+              }
+            },
+
+              "/update_course/{cid}":{
+              "put": {
+              "tags": [
+                  "Update course on API"
+              ],
+              "parameters": [{
+                  "name": "cid",
+                  "in": "path",
+                  "description": "course id to update",
+                  "required": true,
+                  "type": "integer",
+                  "schema" : {
+                      "$ref": "#/components/schemas/Id"
+                  }
+              },
+              {
+                "name": "token",
+                "in": "path",
+                "description": "insert token",
+                "required": true,
+                "type": "string",
+                "schema" : {
+                    "$ref": "#/components/schemas/Token"
+                }
+              }
+            ],
+              "summary": "Update course",
+              "requestBody": {
+              "description": "Update Existing course On Database",
+              "required": true,
+              "content": {
+                  "application/json": {
+                      "schema": {
+                          "$ref": "#/components/schemas/update"
+                        }
+                     }
+                    }
+                },
+              "responses": {
+                  "200": {
+                      "description": "OK",
+                      "schema": {
+                      "$ref": "#/components/schemas/Course"
+                      }
+                  },
+                  "404": {
+                      "description": "NOT FOUND",
+                      "schema": {
+                      "$ref": "#/components/schemas/Course"
+                      }
+              }
+              }
+          }
+        },
+
+         "/delete_course/{cid}":{
+          "delete": {
+              "tags": [
+                  "Delete course to API"
+              ],
+              "parameters": [
+                {
+                  "name": "cid",
+                  "in": "path",
+                  "description": "course id to delete",
+                  "required": true,
+                  "type": "integer",
+                  "schema" : {
+                      "$ref": "#/components/schemas/Id"
+                  }
+              },
+              {
+                "name": "token",
+                "in": "query",
+                "description": "insert token",
+                "required": true,
+                "type": "string",
+                "schema" : {
+                    "$ref": "#/components/schemas/Token"
+                }
+            }
+            ],
+              "summary": "Delete course",
+              "responses": {
+                  "200": {
+                      "description": "OK",
+                      "schema": {
+                      "$ref": "#/components/schemas/Course"
+                      }
+                    },
+                  "404": {
+                      "description": "NOT FOUND",
+                      "schema": {
+                      "$ref": "#/components/schemas/Course"
+                      }
+                     }
+                    }
+            }
+        },
+        "/course/paginate":{
+            "get" :{
+              "tags": [
+                  "Get All course from API"
+              ],
+              "summary": "Get All courses",
+              "parameters": [
+                {
+                    "name": "page",
+                    "in":"query",
+                    "description":"page number",
+                    "required":"true",
+                    "schema":{
+                        "type":"integer",
+                        "default": 1
+                    }
+                },
+                {
+                    "name": "per_page",
+                    "in":"query",
+                    "description":"no. of items per_page",
+                    "required":"true",
+                    "schema":{
+                        "type":"integer",
+                        "default": 2
+                    }
+                }
+            ],
+              "responses": {
+              "200": {
+                  "description": "OK",
+                  "schema": {
+                  "$ref": "#/components/schemas/Course"
+                  }
+              },
+              "404": {
+                  "description": "NOT FOUND",
+                  "schema": {
+                  "$ref": "#/components/schemas/Course"
+                  }
+          }
+          }
+          }
+        },
+
+        "/user/signup": {
+            "post": {
+            "tags": [
+                "Register user to API"
+            ],
+            "summary": "Register user",
+            "requestBody": {
+            "description": "Post New user To Database",
+            "required": true,
+            "content": {
+                "application/json": {
+                "schema": {
+                    "$ref": "#/components/schemas/User"
+                    }
+                }
+            }
+            },
+            "responses": {
+                "200": {
+                    "description": "OK",
+                    "schema": {
+                    "$ref": "#/components/schemas/User"
+                    }
+                },
+                "404": {
+                    "description": "NOT FOUND",
+                    "schema": {
+                    "$ref": "#/components/schemas/User"
+                    }
+            }
+            }
+        }
+        },
+        "/user/login": {
+            "post": {
+            "tags": [
+            "Login user to API"
+        ],
+        "summary": "Login user",
+        "requestBody": {
+        "description": "Post New user To Database",
+        "required": true,
+        "content": {
+        "application/json": {
+        "schema": {
+            "$ref": "#/components/schemas/User"
+            }
+        }
+       }
+       },
+       "responses": {
+        "200": {
+            "description": "OK",
+            "schema": {
+            "$ref": "#/components/schemas/User"
+            }
+        },
+        "404": {
+            "description": "NOT FOUND",
+            "schema": {
+            "$ref": "#/components/schemas/User"
+            }
+    }
+    }
+}
+},
+    "/dashboard/user":{
+    "get" :{
+        "tags": [
+            "Get all users from API"
+        ],
+        "summary": "Get users",
+
+        "responses": {
+        "200": {
+            "description": "OK",
+            "schema": {
+            "$ref": "#/components/schemas/User"
+            }
+        },
+        "404": {
+            "description": "NOT FOUND",
+            "schema": {
+            "$ref": "#/components/schemas/User"
+            }
+    }
+   }
+  }
+  },
+  "/create/admin": {
+    "post": {
+    "tags": [
+        "Register admin to API"
+    ],
+    "summary": "Register admin",
+    "requestBody": {
+    "description": "Post New user To Database",
+    "required": true,
+    "content": {
+        "application/json": {
+        "schema": {
+            "$ref": "#/components/schemas/Admin"
+            }
+        }
+    }
+    },
+    "responses": {
+        "200": {
+            "description": "OK",
+            "schema": {
+            "$ref": "#/components/schemas/Admin"
+            }
+        },
+        "404": {
+            "description": "NOT FOUND",
+            "schema": {
+            "$ref": "#/components/schemas/Admin"
+            }
+    }
+    }
+}
+},
+
+"/admin/login": {
+    "post": {
+    "tags": [
+        "Login admin to API"
+    ],
+    "summary": "Login admin",
+    "requestBody": {
+    "description": "Post New admin To Database",
+    "required": true,
+    "content": {
+        "application/json": {
+        "schema": {
+            "$ref": "#/components/schemas/Admin"
+            }
+        }
+    }
+    },
+    "responses": {
+        "200": {
+            "description": "OK",
+            "schema": {
+            "$ref": "#/components/schemas/Admin"
+            }
+        },
+        "404": {
+            "description": "NOT FOUND",
+            "schema": {
+            "$ref": "#/components/schemas/Admin"
+            }
+    }
+    }
+}
+}
+
+
+
+}
+}
+    

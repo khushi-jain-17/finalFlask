@@ -31,6 +31,7 @@ def enroll_user():
 @role_required(2)
 def search_courses():
     keyword = request.args.get('keyword')
+    # keyword = request.json["keyword"]
     mycourse = Course.query
     if keyword:
         find = mycourse.filter(Course.cname.ilike(f"%{keyword}%"))

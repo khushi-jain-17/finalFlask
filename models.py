@@ -7,7 +7,7 @@ from datetime import datetime
 class User(db.Model):
     __tablename__ = 'users'
     
-    uid = db.Column(db.Integer, primary_key=True )
+    uid = db.Column(db.Integer, primary_key=True,autoincrement=True )
     uname = db.Column(db.String(100), nullable=False)
     email = db.Column(db.String(100), nullable=False)
     password = db.Column(db.String(300), nullable=False)
@@ -23,7 +23,8 @@ class Admin(db.Model):
     __tablename__ = 'admin'
 
     id = db.Column(db.Integer, primary_key=True)
-    admin_id = db.Column(db.Integer, unique=True, nullable=False)
+    admin_id = db.Column(db.Integer, autoincrement=True, nullable=False)
+    # aemail = db.column(db.Integer,nullable=False)
     password = db.Column(db.String(300), nullable=False)
     role_id = db.Column(db.Integer, db.ForeignKey('roles.role_id'), default=1)
     role = db.relationship('Role', backref=db.backref('admin', lazy=True))

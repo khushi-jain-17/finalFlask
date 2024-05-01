@@ -2,7 +2,7 @@ from flask import request,jsonify,Blueprint
 from myrole import *
 from app import db
 from models import Course
-
+import logging
 
 mycourse = Blueprint('mycourse',__name__)
 
@@ -22,25 +22,28 @@ def create():
     return jsonify({'message': 'course created successfully'}), 201
 
 
-@mycourse.route('/get_course', methods=['GET'])
+@mycourse.route('/courses', methods=['GET'])
 @role_required(1)
 def get_courses():
-    course = Course.query.all()
-    output = []
-    for c in course:
-        course_data = {
-            'cid': c.cid,
-            'cname': c.cname,
-            'description':c.description,
-            'fee':c.fee,
-            'ctime':c.ctime,
-            'rating':c.rating
-        }
-        output.append(course_data)
-    return jsonify(output)
+    try:
+        course = Course.query.all()
+        output = []
+        for c in course:
+            course_data = {
+                'cid': c.cid,
+                'cname': c.cname,
+                'description': c.description,
+                'fee': c.fee,
+                'ctime': c.ctime,
+                'rating': c.rating
+            }
+            output.append(course_data)
+        return jsonify(output), 200  # 200 OK
+    except Exception as e:
+        return jsonify({'error': str(e)}), 500  # 500 Internal Server Error
 
 
-@mycourse.route('/get_course/<int:cid>',methods=['GET'])
+@mycourse.route('/course/<int:cid>',methods=['GET'])
 @role_required(1)
 def getbyid(cid):
     course = Course.query.get_or_404(cid)
@@ -56,7 +59,7 @@ def getbyid(cid):
     return jsonify({'course':output})
 
 
-@mycourse.route("/update/course/<int:cid>",methods=['PUT'])
+@mycourse.route("/update_course/<int:cid>",methods=['PUT'])
 @role_required(1)
 def update(cid):
     course = Course.query.get_or_404(cid)
@@ -70,7 +73,7 @@ def update(cid):
     return jsonify({'message':'Course Updated Successfully'})
 
 
-@mycourse.route("/delete/course/<int:cid>", methods=['DELETE'])
+@mycourse.route("/delete_course/<int:cid>", methods=['DELETE'])
 @role_required(1)
 def delete(cid):
     course = Course.query.get_or_404(cid)
