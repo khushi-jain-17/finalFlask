@@ -1,4 +1,4 @@
-from app import db
+from app import db, ma
 from sqlalchemy.orm import relationship
 from datetime import datetime
 
@@ -12,12 +12,21 @@ class User(db.Model):
     email = db.Column(db.String(100), nullable=False)
     password = db.Column(db.String(300), nullable=False)
 
+class UserSchema(ma.Schema):
+    class Meta:
+        fields = ('uid', 'uname', 'email','password')
+
+user_schema = UserSchema(many=False)
+user_schema = UserSchema(many=True)
+
+
 
 class Role(db.Model):
     __tablename__ = 'roles'
     
     role_id = db.Column(db.Integer, primary_key=True)
     rname = db.Column(db.String(100), unique=True, nullable=False)
+
 
 class Admin(db.Model):
     __tablename__ = 'admin'
@@ -28,6 +37,13 @@ class Admin(db.Model):
     password = db.Column(db.String(300), nullable=False)
     role_id = db.Column(db.Integer, db.ForeignKey('roles.role_id'), default=1)
     role = db.relationship('Role', backref=db.backref('admin', lazy=True))
+
+class AdminSchema(ma.Schema):
+    class Meta:
+        fields = ('admin_id','password','role_id','role')
+
+admin_schema = AdminSchema(many=False)
+admin_schema = AdminSchema(many=True)
 
 
 class Course(db.Model):
@@ -55,6 +71,15 @@ class Course(db.Model):
             'rating':self.rating,
             'lessons': [lesson.serialize() for lesson in self.lessons]
         }
+
+
+class CourseSchema(ma.Schema):
+    class Meta:
+        fields = ('cid', 'cname', 'description', 'fee', 'ctime','rating')
+
+course_schema = CourseSchema(many=False)
+course_schema = CourseSchema(many=True)
+
 
 
 class Lesson(db.Model):
