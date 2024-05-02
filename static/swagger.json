@@ -11,8 +11,16 @@
     },
     "tags": [
       {
-        "cname": "Products API",
+        "name": "Course API",
         "description": "Test API"
+      },
+      {
+        "name":"User API",
+        "description":"Test API"
+      },
+      {
+      "name": "Admin API",
+      "description": "test api"
       }
     ],
     "servers": [
@@ -30,7 +38,7 @@
                 "BearerAuth": {
                     "type": "http",
                     "scheme": "bearer",
-                    "bearerFormat": "JWT"
+                    "in": "header"
                 }
             },
             "schemas": {
@@ -131,15 +139,15 @@
             "rating": {
                "type": "float"
             }
-    }
-  }    
+        }
+     }    
 }
 },
        "paths": {
           "/create/course": {
               "post": {
               "tags": [
-                  "Add course to API"
+                "Course API"
               ],
               "summary": "Add course",
               "parameters": [{
@@ -182,19 +190,12 @@
               "/courses":{
               "get" :{
                 "tags": [
-                    "Get All course from API"
+                    "Course API"
                 ],
                 "summary": "Get All courses",
-                "parameters": [{
-                    "name": "Token",
-                    "in": "query",
-                    "description": "insert token",
-                    "required": true,
-                    "type": "string",
-                    "schema" : {
-                        "$ref": "#/components/schemas/Token"
-                    }
-                  }],
+                "parameters": [
+                 
+                ],
                 "responses": {
                 "200": {
                     "description": "OK",
@@ -215,7 +216,7 @@
 
               "get" :{
                   "tags": [
-                      "Get courses from API"
+                      "Course API"
                   ],
                   "summary": "Get courses",
                   "parameters": [{
@@ -227,17 +228,7 @@
                     "schema" : {
                         "$ref": "#/components/schemas/Id"
                     }
-                  },
-                  {
-                    "name": "token",
-                    "in": "path",
-                    "description": "insert token",
-                    "required": true,
-                    "type": "string",
-                    "schema" : {
-                        "$ref": "#/components/schemas/Token"
-                        }
-                    }
+                  }
                 ],
                   "responses": {
                   "200": {
@@ -259,7 +250,7 @@
               "/update_course/{cid}":{
               "put": {
               "tags": [
-                  "Update course on API"
+                  "Course API"
               ],
               "parameters": [{
                   "name": "cid",
@@ -270,17 +261,8 @@
                   "schema" : {
                       "$ref": "#/components/schemas/Id"
                   }
-              },
-              {
-                "name": "token",
-                "in": "path",
-                "description": "insert token",
-                "required": true,
-                "type": "string",
-                "schema" : {
-                    "$ref": "#/components/schemas/Token"
-                }
               }
+              
             ],
               "summary": "Update course",
               "requestBody": {
@@ -314,7 +296,7 @@
          "/delete_course/{cid}":{
           "delete": {
               "tags": [
-                  "Delete course to API"
+                  "Course API"
               ],
               "parameters": [
                 {
@@ -326,17 +308,8 @@
                   "schema" : {
                       "$ref": "#/components/schemas/Id"
                   }
-              },
-              {
-                "name": "token",
-                "in": "query",
-                "description": "insert token",
-                "required": true,
-                "type": "string",
-                "schema" : {
-                    "$ref": "#/components/schemas/Token"
-                }
-            }
+              }
+            
             ],
               "summary": "Delete course",
               "responses": {
@@ -358,7 +331,7 @@
         "/course/paginate":{
             "get" :{
               "tags": [
-                  "Get All course from API"
+                  "Course API"
               ],
               "summary": "Get All courses",
               "parameters": [
@@ -399,11 +372,33 @@
           }
           }
         },
-
+        "/courses/lessons":{
+            "get" :{
+              "tags": [
+                  "Course API"
+              ],
+              "summary": "Get All course with lessons",
+              
+              "responses": {
+              "200": {
+                  "description": "OK",
+                  "schema": {
+                  "$ref": "#/components/schemas/Course"
+                  }
+              },
+              "404": {
+                  "description": "NOT FOUND",
+                  "schema": {
+                  "$ref": "#/components/schemas/Course"
+                  }
+          }
+          }
+          }
+        },
         "/user/signup": {
             "post": {
             "tags": [
-                "Register user to API"
+                "User API"
             ],
             "summary": "Register user",
             "requestBody": {
@@ -436,7 +431,7 @@
         "/user/login": {
             "post": {
             "tags": [
-            "Login user to API"
+            "User API"
         ],
         "summary": "Login user",
         "requestBody": {
@@ -469,7 +464,7 @@
     "/dashboard/user":{
     "get" :{
         "tags": [
-            "Get all users from API"
+            "User API"
         ],
         "summary": "Get users",
 
@@ -492,7 +487,7 @@
   "/create/admin": {
     "post": {
     "tags": [
-        "Register admin to API"
+        "Admin API"
     ],
     "summary": "Register admin",
     "requestBody": {
@@ -526,7 +521,7 @@
 "/admin/login": {
     "post": {
     "tags": [
-        "Login admin to API"
+        "Admin API"
     ],
     "summary": "Login admin",
     "requestBody": {
@@ -556,8 +551,6 @@
     }
 }
 }
-
-
 
 }
 }

@@ -8,7 +8,7 @@ mycourse = Blueprint('mycourse',__name__)
 
 
 @mycourse.route("/create/course", methods=['POST'])
-@role_required(1)
+@token_required
 def create():
     cid = request.json["cid"]
     cname = request.json["cname"]
@@ -23,7 +23,7 @@ def create():
 
 
 @mycourse.route('/courses', methods=['GET'])
-@role_required(1)
+@token_required
 def get_courses():
     try:
         course = Course.query.all()
@@ -44,7 +44,7 @@ def get_courses():
 
 
 @mycourse.route('/course/<int:cid>',methods=['GET'])
-@role_required(1)
+@token_required
 def getbyid(cid):
     course = Course.query.get_or_404(cid)
     output=[]
@@ -60,7 +60,7 @@ def getbyid(cid):
 
 
 @mycourse.route("/update_course/<int:cid>",methods=['PUT'])
-@role_required(1)
+@token_required
 def update(cid):
     course = Course.query.get_or_404(cid)
     data = request.get_json()
@@ -74,7 +74,7 @@ def update(cid):
 
 
 @mycourse.route("/delete_course/<int:cid>", methods=['DELETE'])
-@role_required(1)
+@token_required
 def delete(cid):
     course = Course.query.get_or_404(cid)
     db.session.delete(course)
@@ -83,7 +83,7 @@ def delete(cid):
 
 
 @mycourse.route('/course/<int:cid>', methods=['GET'])
-@role_required(1)
+@token_required
 def course_analytics(cid):
     course = Course.query.get(cid)
     if course:
@@ -92,8 +92,8 @@ def course_analytics(cid):
         return jsonify({'error': 'Course not found'}), 404
     
 
-@mycourse.route('/mycourses', methods=['GET'])
-@role_required(2)
+@mycourse.route('/courses/lessons', methods=['GET'])
+@token_required
 def courseAnalytics():
     courses = Course.query.all()
     serialized_courses = []
@@ -105,7 +105,7 @@ def courseAnalytics():
 
 
 @mycourse.route('/dashboard/course', methods=['GET'])
-@role_required(1)
+@token_required
 def dashboard():
     course = Course.query.all()
     output = []
@@ -123,6 +123,7 @@ def dashboard():
 
 
 @mycourse.route("/course/paginate", methods=['GET'])
+@token_required
 def paginate():
     page = request.args.get('page', 1, type=int)
     per_page = request.args.get('per_page', 2, type=int)
