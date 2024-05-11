@@ -10,18 +10,22 @@
       }
     },
     "tags": [
-      {
+        {
+            "name":"User API",
+            "description":"Test API"
+        },
+        {
+          "name": "Admin API",
+          "description": "Test API"
+        },  
+        {
         "name": "Course API",
         "description": "Test API"
-      },
-      {
-        "name":"User API",
-        "description":"Test API"
-      },
-      {
-      "name": "Admin API",
-      "description": "Test api"
-      }
+        },
+        {
+            "name": "Lesson API",
+            "description": "Test API"
+        }      
     ],
     "servers": [
         {
@@ -65,6 +69,28 @@
                           "type": "number","format":"float"
                         }
                     }
+                },
+
+                "Lesson":{
+                    "type":"object",
+                    "properties": {
+                        "lid":{
+                            "type":"integer"
+                        },
+                        "l_id":{
+                            "type":"integer"
+                        },
+                        "title":{
+                            "type":"string"
+                        },
+                        "content":{
+                            "type":"string"
+                        },
+                        "cid":{
+                            "type": "integer"
+                        }
+                    }
+
                 },
   
                 "User": {
@@ -121,7 +147,7 @@
               }
             },
              
-          "update":{
+          "course_update":{
             "type": "object",
             "properties" :{
             "cname": {
@@ -137,10 +163,28 @@
                "type":"string"
             },
             "rating": {
-               "type": "float"
+                "type": "number","format":"float"
             }
-        }
-     }    
+           }
+        },
+
+        "lesson_update":{
+            "type": "object",
+            "properties" :{
+            "title": {
+               "type": "string"
+            },
+            "content":{
+                "type":"text"
+            },
+            "cid": {
+                "type": "integer"
+            },
+            "l_id":{
+               "type": "integer"
+            }
+    }
+ }        
 }
 },
        "paths": {
@@ -150,6 +194,7 @@
                 "Course API"
               ],
               "summary": "Add course",
+
               "parameters": [{
                 "name": "token",
                 "in": "query",
@@ -160,6 +205,7 @@
                     "$ref": "#/components/schemas/Token"
                 }
               }],
+
               "requestBody": {
               "description": "Post New course To Database",
               "required": true,
@@ -218,11 +264,11 @@
                   "tags": [
                       "Course API"
                   ],
-                  "summary": "Get courses",
+                  "summary": "Get courses through id",
                   "parameters": [{
                     "name": "cid",
                     "in": "path",
-                    "description": "course id to update",
+                    "description": "course id",
                     "required": true,
                     "type": "integer",
                     "schema" : {
@@ -247,7 +293,7 @@
               }
             },
 
-              "/update_course/{cid}":{
+            "/update_course/{cid}":{
               "put": {
               "tags": [
                   "Course API"
@@ -271,7 +317,7 @@
               "content": {
                   "application/json": {
                       "schema": {
-                          "$ref": "#/components/schemas/update"
+                          "$ref": "#/components/schemas/course_update"
                         }
                      }
                     }
@@ -395,6 +441,189 @@
           }
           }
         },
+
+        "/create/lesson":{
+            "post": {
+                "tags": [
+                  "Lesson API"
+                ],
+                "summary": "Add lesson",
+                "parameters": [{
+                  "name": "token",
+                  "in": "query",
+                  "description": "insert token",
+                  "required": true,
+                  "type": "string",
+                  "schema" : {
+                      "$ref": "#/components/schemas/Token"
+                  }
+                }],
+                "requestBody": {
+                "description": "Post New lesson To Database",
+                "required": true,
+                "content": {
+                    "application/json": {
+                    "schema": {
+                        "$ref": "#/components/schemas/Lesson"
+                        }
+                       }
+                  }
+                },
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                        "$ref": "#/components/schemas/Lesson"
+                        }
+                    },
+                    "404": {
+                        "description": "NOT FOUND",
+                        "schema": {
+                        "$ref": "#/components/schemas/Lesson"
+                        }
+                       }
+                  }
+                }
+        },
+
+        "/get_lesson":{
+            "get":{
+                "tags":[
+                    "Lesson API"
+                ],
+                "summary":"Get Lessons",
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                        "$ref": "#/components/schemas/Lesson"
+                        }
+                    },
+                    "404": {
+                        "description": "NOT FOUND",
+                        "schema": {
+                        "$ref": "#/components/schemas/Lesson"
+                        }
+                }
+                }
+            }
+        },
+
+        "/get_lesson/{lid}" : {
+        "get" :{
+            "tags": [
+                "Lesson API"
+            ],
+            "summary": "Get lessons by id",
+            "parameters": [{
+              "name": "lid",
+              "in": "path",
+              "description": "lesson id",
+              "required": true,
+              "type": "integer",
+              "schema" : {
+                  "$ref": "#/components/schemas/Id"
+              }
+            }
+          ],
+            "responses": {
+            "200": {
+                "description": "OK",
+                "schema": {
+                "$ref": "#/components/schemas/Lesson"
+                }
+               },
+            "404": {
+                "description": "NOT FOUND",
+                "schema": {
+                "$ref": "#/components/schemas/Lesson"
+                }
+              }
+           }
+        }
+      },
+
+      "/update/lesson/{lid}":{
+        "put": {
+        "tags": [
+            "Lesson API"
+        ],
+        "parameters": [{
+            "name": "lid",
+            "in": "path",
+            "description": "lid id to update",
+            "required": true,
+            "type": "integer",
+            "schema" : {
+                "$ref": "#/components/schemas/Id"
+            }
+        }
+        
+      ],
+        "summary": "Update Lesson",
+        "requestBody": {
+        "description": "Update Existing lesson On Database",
+        "required": true,
+        "content": {
+            "application/json": {
+                "schema": {
+                    "$ref": "#/components/schemas/lesson_update"
+                  }
+               }
+              }
+          },
+        "responses": {
+            "200": {
+                "description": "OK",
+                "schema": {
+                "$ref": "#/components/schemas/Lesson"
+                }
+            },
+            "404": {
+                "description": "NOT FOUND",
+                "schema": {
+                "$ref": "#/components/schemas/Lesson"
+                }
+        }
+        }
+    }
+  },
+
+      "/delete/lesson/{lid}":{
+        "delete": {
+            "tags": [
+                "Lesson API"
+            ],
+            "parameters": [
+              {
+                "name": "lid",
+                "in": "path",
+                "description": "lesson id to delete",
+                "required": true,
+                "type": "integer",
+                "schema" : {
+                    "$ref": "#/components/schemas/Id"
+                }
+            }
+          ],
+            "summary": "Delete lesson",
+            "responses": {
+                "200": {
+                    "description": "OK",
+                    "schema": {
+                    "$ref": "#/components/schemas/Lesson"
+                    }
+                  },
+                "404": {
+                    "description": "NOT FOUND",
+                    "schema": {
+                    "$ref": "#/components/schemas/Lesson"
+                    }
+                   }
+                  }
+          }
+      },
+
         "/user/signup": {
             "post": {
             "tags": [
@@ -428,6 +657,7 @@
             }
         }
         },
+
         "/user/login": {
             "post": {
             "tags": [
@@ -484,6 +714,7 @@
    }
   }
   },
+
   "/create/admin": {
     "post": {
     "tags": [
