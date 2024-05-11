@@ -9,7 +9,7 @@ mylesson = Blueprint('mylesson',__name__)
 
 
 @mylesson.route("/create/lesson", methods=['POST'])
-@role_required(1)
+@token_required
 def create():
     lid = request.json["lid"]
     l_id = request.json["l_id"]
@@ -23,7 +23,7 @@ def create():
 
 
 @mylesson.route('/get_lesson', methods=['GET'])
-@role_required(1)
+@token_required
 def get_lesson():
     lesson = Lesson.query.all()
     output = []
@@ -39,7 +39,7 @@ def get_lesson():
 
 
 @mylesson.route('/get_lesson/<int:lid>',methods=['GET'])
-@role_required(1)
+@token_required
 def getbyid(lid):
     lesson = Lesson.query.get_or_404(lid)
     output=[]
@@ -54,7 +54,7 @@ def getbyid(lid):
 
 
 @mylesson.route("/update/lesson/<int:lid>", methods=['PUT'])
-@role_required(1)
+@token_required
 def update(lid):
     lesson = Lesson.query.get_or_404(lid)
     data = request.get_json()
@@ -67,7 +67,7 @@ def update(lid):
    
 
 @mylesson.route("/delete/lesson/<int:lid>", methods=['DELETE'])
-@role_required(1)
+@token_required
 def delete(lid):
     lesson = Lesson.query.get_or_404(lid)
     db.session.delete(lesson)

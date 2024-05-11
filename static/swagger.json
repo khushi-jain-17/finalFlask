@@ -1,9 +1,9 @@
 {
     "openapi": "3.0.0",
     "info": {
-      "description": "Course Management System",
+      "description": "Flask API",
       "version": "1.0.0",
-      "title": "Flask API",
+      "title": "Course Management System",
       "license": {
         "name": "MIT",
         "url": "https://opensource.org/licenses/MIT"
@@ -20,7 +20,7 @@
       },
       {
       "name": "Admin API",
-      "description": "test api"
+      "description": "Test api"
       }
     ],
     "servers": [
