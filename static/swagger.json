@@ -1,12 +1,15 @@
 {
     "openapi": "3.0.0",
     "info": {
-      "description": "Flask API",
-      "version": "1.0.0",
-      "title": "Course Management System",
-      "license": {
+    "title": "Course Management System",
+    "description": "Flask API Testing",
+    "version": "1.0.0",
+    "license": {
         "name": "MIT",
         "url": "https://opensource.org/licenses/MIT"
+      },
+      "contact":{
+        "email": "khushisaklecha17@gmail.com"
       }
     },
     "tags": [
@@ -29,7 +32,13 @@
     ],
     "servers": [
         {
-        "url": "/"
+            "url":"/"
+        },
+        {
+        "url": "http://localhost:5000"
+        },
+        {
+        "url": "http://api.com"
         }
     ],
     "security":[
@@ -45,6 +54,7 @@
                     "in": "header"
                 }
             },
+            
             "schemas": {
                 
                 "Course": {
@@ -184,9 +194,10 @@
                "type": "integer"
             }
     }
- }        
+        }        
 }
 },
+
        "paths": {
           "/create/course": {
               "post": {
@@ -195,7 +206,8 @@
               ],
               "summary": "Add course",
 
-              "parameters": [{
+              "parameters": [
+                {
                 "name": "token",
                 "in": "query",
                 "description": "insert token",
@@ -204,34 +216,49 @@
                 "schema" : {
                     "$ref": "#/components/schemas/Token"
                 }
-              }],
+                }
+            ],
 
               "requestBody": {
               "description": "Post New course To Database",
               "required": true,
               "content": {
-                  "application/json": {
-                  "schema": {
-                      "$ref": "#/components/schemas/Course"
-                      }
-                     }
+                    "application/json": {
+                    "schema": {
+                        "$ref": "#/components/schemas/Course"
+                    }
+                    }
                 }
               },
               "responses": {
-                  "200": {
-                      "description": "OK",
-                      "schema": {
-                      "$ref": "#/components/schemas/Course"
-                      }
-                  },
+                "201": {
+                    "description": "Created Successfully",
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "$ref": "#/components/schemas/Course"
+                            }
+                        }
+                    }
+                },
                   "404": {
-                      "description": "NOT FOUND",
-                      "schema": {
-                      "$ref": "#/components/schemas/Course"
-                      }
-                     }
+                    "description": "NOT FOUND",
+                    "content":{
+                        "application/json":{  
+                            "schema": {
+                                "type": "object",
+                                "properties": {
+                                "error": {
+                                "type": "string",
+                                    "example": "Data not found"
+                                }
+                            }
+                        }
+                    }
                 }
-              }
+            }
+        }
+        }
             },
               "/courses":{
               "get" :{
@@ -240,24 +267,40 @@
                 ],
                 "summary": "Get All courses",
                 "parameters": [
-                 
+                        {
+                            "name": "token",
+                            "in": "query",
+                            "description": "insert token",
+                            "required": true,
+                            "type": "string",
+                            "schema" : {
+                                "$ref": "#/components/schemas/Token"
+                            }
+                            }
                 ],
                 "responses": {
                 "200": {
                     "description": "OK",
-                    "schema": {
-                    "$ref": "#/components/schemas/Course"
+                    "content":{
+                        "application/json":{
+                            "schema": {
+                                "$ref": "#/components/schemas/Course"
+                                }
+                        }
                     }
                 },
                 "404": {
                     "description": "NOT FOUND",
-                    "schema": {
-                    "$ref": "#/components/schemas/Course"
+                    "content":{
+                        "application/json":{
+                            "schema": {
+                                "$ref": "#/components/schemas/Course"
+                            }
+                        }
                     }
+                }
             }
-            }
-            }
-          },
+        },
           "/course/{cid}":{
 
               "get" :{
@@ -276,21 +319,36 @@
                     }
                   }
                 ],
-                  "responses": {
-                  "200": {
-                      "description": "OK",
-                      "schema": {
-                      "$ref": "#/components/schemas/Course"
-                      }
-                     },
-                  "404": {
-                      "description": "NOT FOUND",
-                      "schema": {
-                      "$ref": "#/components/schemas/Course"
-                      }
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "content":{
+                            "application/json":{
+                                "schema": {
+                                    "$ref": "#/components/schemas/Course"
+                                    }
+                            }
+                        }
+                    },
+                    "404": {
+                        "description": "NOT FOUND",
+                        "content":{
+                            "application/json":{
+                                "schema": {
+                                    "type": "object",
+                                    "properties": {
+                                        "error": {
+                                            "type": "string",
+                                            "example": "Data not found"
+                                        }
+                                    }
+                                }
+                                }
+                            }
+                        }
                     }
-                 }
-              }
+                }
+            }
             },
 
             "/update_course/{cid}":{
@@ -310,33 +368,47 @@
               }
               
             ],
-              "summary": "Update course",
-              "requestBody": {
-              "description": "Update Existing course On Database",
-              "required": true,
-              "content": {
-                  "application/json": {
-                      "schema": {
-                          "$ref": "#/components/schemas/course_update"
-                        }
-                     }
+            "summary": "Update course",
+            "requestBody": {
+            "description": "Update Existing course On Database",
+            "required": true,
+            "content": {
+                "application/json": {
+                    "schema": {
+                        "$ref": "#/components/schemas/course_update"
                     }
-                },
-              "responses": {
-                  "200": {
-                      "description": "OK",
-                      "schema": {
-                      "$ref": "#/components/schemas/Course"
-                      }
-                  },
-                  "404": {
-                      "description": "NOT FOUND",
-                      "schema": {
-                      "$ref": "#/components/schemas/Course"
-                      }
-              }
-              }
-          }
+                    }
+                }
+            },
+            "responses": {
+                "200": {
+                    "description": "OK",
+                    "content":{
+                        "application/json":{
+                            "schema": {
+                                "$ref": "#/components/schemas/Course"
+                                }
+                            }
+                        }
+                    },
+                    "404": {
+                        "description": "NOT FOUND",
+                        "content":{
+                            "application/json":{
+                                "schema": {
+                                    "type": "object",
+                    "properties": {
+                        "error": {
+                            "type": "string",
+                            "example": "Data not found"
+                        }
+                    }
+                    }
+                }
+                        }
+                    }
+                }
+            }
         },
 
          "/delete_course/{cid}":{
@@ -357,21 +429,35 @@
               }
             
             ],
-              "summary": "Delete course",
-              "responses": {
-                  "200": {
-                      "description": "OK",
-                      "schema": {
-                      "$ref": "#/components/schemas/Course"
-                      }
-                    },
-                  "404": {
-                      "description": "NOT FOUND",
-                      "schema": {
-                      "$ref": "#/components/schemas/Course"
-                      }
-                     }
+            "summary": "Delete course",
+            "responses": {
+                "204": {
+                    "description": "no content",
+                    "content":{
+                        "application/json":{
+                            "schema": {
+                                "$ref": "#/components/schemas/Course"
+                                }
+                        }
                     }
+                },
+                "404": {
+                    "description": "NOT FOUND",
+                    "content":{
+                        "application/json":{
+                        "schema": {
+                            "type": "object",
+                        "properties": {
+                            "error": {
+                            "type": "string",
+                            "example": "Data not found"
+                        }
+                    }
+                }
+                        }
+                    }
+                }
+            }
             }
         },
         "/course/paginate":{
@@ -384,7 +470,7 @@
                 {
                     "name": "page",
                     "in":"query",
-                    "description":"page number",
+                    "description":"page number for pagination",
                     "required":"true",
                     "schema":{
                         "type":"integer",
@@ -402,41 +488,60 @@
                     }
                 }
             ],
-              "responses": {
-              "200": {
-                  "description": "OK",
-                  "schema": {
-                  "$ref": "#/components/schemas/Course"
-                  }
-              },
-              "404": {
-                  "description": "NOT FOUND",
-                  "schema": {
-                  "$ref": "#/components/schemas/Course"
-                  }
-          }
-          }
-          }
+            "responses": {
+                "200": {
+                    "description": "OK",
+                    "content":{
+                        "application/json":{
+                            "schema": {
+                                "$ref": "#/components/schemas/Course"
+                                }
+                        }
+                    }
+                },
+                "404": {
+                    "description": "NOT FOUND",
+                    "content":{
+                        "application/json":{
+                            "schema": {
+                                "type": "object",
+                                "properties": {
+                                    "error": {
+                                        "type": "string",
+                                        "example": "Data not found"
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        }
         },
         "/courses/lessons":{
             "get" :{
               "tags": [
                   "Course API"
-              ],
-              "summary": "Get All course with lessons",
-              
-              "responses": {
-              "200": {
+            ],
+            "summary": "Get All course with lessons",  
+            "responses": {
+                "200": {
                   "description": "OK",
                   "schema": {
                   "$ref": "#/components/schemas/Course"
-                  }
-              },
-              "404": {
+                    }
+                },
+                "404": {
                   "description": "NOT FOUND",
                   "schema": {
-                  "$ref": "#/components/schemas/Course"
-                  }
+                    "type": "object",
+                    "properties": {
+                        "error": {
+                            "type": "string",
+                            "example": "Data not found"
+                        }
+                    }
+                }              
           }
           }
           }
@@ -479,7 +584,13 @@
                     "404": {
                         "description": "NOT FOUND",
                         "schema": {
-                        "$ref": "#/components/schemas/Lesson"
+                            "type": "object",
+                            "properties": {
+                                "error": {
+                                    "type": "string",
+                                    "example": "Invalid data, something went wrong"
+                                }
+                            }
                         }
                        }
                   }
@@ -502,8 +613,14 @@
                     "404": {
                         "description": "NOT FOUND",
                         "schema": {
-                        "$ref": "#/components/schemas/Lesson"
+                            "type": "object",
+                    "properties": {
+                        "error": {
+                            "type": "string",
+                            "example": "Data not found"
                         }
+                    }
+                    }
                 }
                 }
             }
@@ -536,7 +653,13 @@
             "404": {
                 "description": "NOT FOUND",
                 "schema": {
-                "$ref": "#/components/schemas/Lesson"
+                    "type": "object",
+                    "properties": {
+                        "error": {
+                            "type": "string",
+                            "example": "Data Id  not found"
+                        }
+                    }
                 }
               }
            }
@@ -582,9 +705,15 @@
             "404": {
                 "description": "NOT FOUND",
                 "schema": {
-                "$ref": "#/components/schemas/Lesson"
+                    "type": "object",
+                    "properties": {
+                        "error": {
+                            "type": "string",
+                            "example": "Data not found"
+                        }
+                    }
                 }
-        }
+            }
         }
     }
   },
@@ -595,32 +724,42 @@
                 "Lesson API"
             ],
             "parameters": [
-              {
+            {
                 "name": "lid",
                 "in": "path",
                 "description": "lesson id to delete",
                 "required": true,
                 "type": "integer",
                 "schema" : {
-                    "$ref": "#/components/schemas/Id"
+                    "$ref": "#/components/schemas/Lesson"
                 }
-            }
-          ],
+            }    
+            ],
             "summary": "Delete lesson",
             "responses": {
                 "200": {
                     "description": "OK",
-                    "schema": {
-                    "$ref": "#/components/schemas/Lesson"
+                    "content":{
+                        "application/json":{
+                            "schema": {
+                                "$ref": "#/components/schemas/Lesson"
+                            }
+                        }
                     }
                   },
                 "404": {
                     "description": "NOT FOUND",
                     "schema": {
-                    "$ref": "#/components/schemas/Lesson"
+                        "type": "object",
+                        "properties": {
+                            "error": {
+                                "type": "string",
+                                "example": "Data not found"
+                            }
+                        }
                     }
                    }
-                  }
+                }
           }
       },
 
@@ -644,16 +783,30 @@
             "responses": {
                 "200": {
                     "description": "OK",
-                    "schema": {
-                    "$ref": "#/components/schemas/User"
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "$ref": "#/components/schemas/User"
+                            }
+                        }
                     }
                 },
-                "404": {
-                    "description": "NOT FOUND",
-                    "schema": {
-                    "$ref": "#/components/schemas/User"
+                "400": {
+                    "description": "Bad Request",
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "type": "object",
+                                "properties": {
+                                    "error": {
+                                        "type": "string",
+                                        "example": "Invalid credentials"
+                                    }
+                                }
+                            }
+                        }
                     }
-            }
+                }
             }
         }
         },
@@ -678,16 +831,36 @@
        "responses": {
         "200": {
             "description": "OK",
-            "schema": {
-            "$ref": "#/components/schemas/User"
+            "content": {
+                "application/json": {
+                    "schema": {
+                        "type": "object",
+                        "properties": {
+                            "token": {
+                                "type": "string",
+                                "description": "Bearer token for authentication"
+                            }
+                        }
+                    }
+                }
             }
         },
-        "404": {
-            "description": "NOT FOUND",
-            "schema": {
-            "$ref": "#/components/schemas/User"
+        "401": {
+            "description": "Unauthorized",
+            "content": {
+                "application/json": {
+                    "schema": {
+                        "type": "object",
+                        "properties": {
+                            "error": {
+                                "type": "string",
+                                "example": "Invalid credentials"
+                            }
+                        }
+                    }
+                }
             }
-    }
+        }
     }
 }
 },
@@ -708,9 +881,15 @@
         "404": {
             "description": "NOT FOUND",
             "schema": {
-            "$ref": "#/components/schemas/User"
-            }
-    }
+                "type": "object",
+                        "properties": {
+                            "error": {
+                                "type": "string",
+                                "example": "Data not found"
+                            }
+                        }            
+                    }
+                }
    }
   }
   },
@@ -742,7 +921,13 @@
         "404": {
             "description": "NOT FOUND",
             "schema": {
-            "$ref": "#/components/schemas/Admin"
+                "type": "object",
+                "properties": {
+                    "error": {
+                        "type": "string",
+                        "example": "Validation Error"
+                    }
+                }
             }
     }
     }
@@ -773,12 +958,22 @@
             "$ref": "#/components/schemas/Admin"
             }
         },
-        "404": {
-            "description": "NOT FOUND",
-            "schema": {
-            "$ref": "#/components/schemas/Admin"
+        "401": {
+            "description": "Unauthorized",
+            "content": {
+                "application/json": {
+                    "schema": {
+                        "type": "object",
+                        "properties": {
+                            "error": {
+                                "type": "string",
+                                "example": "Invalid credentials"
+                            }
+                        }
+                    }
+                }
             }
-    }
+        }
     }
 }
 }
